@@ -9,7 +9,7 @@ type Props = {
 
 const UserView = (({user, setUser} : Props) => {
     return (
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+      <div className="bg-white shadow overflow-hidden sm:rounded-lg">
         <div className="px-4 py-5 sm:px-6">
           <div className="py-6 cursor-pointer" onClick={() => setUser(null)}>
             <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />

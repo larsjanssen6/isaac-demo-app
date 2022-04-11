@@ -10,7 +10,7 @@ const useSortableDataHook = (items: Array<User>, config: Sort|null = null) => {
   const [sortConfig, setSortConfig] = useState<Sort|null>(config);
 
   const sortedItems = useMemo(() => {
-    let sortableItems: Array<User> = [...items];
+    let sortableItems: Array<User> = items;
     if (sortConfig !== null) {
       sortableItems.sort((a: User, b: User) => {
         if (a[sortConfig.key] < b[sortConfig.key]) {

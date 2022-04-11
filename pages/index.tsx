@@ -4,11 +4,13 @@ import { useState } from 'react';
 import User from '../types/User';
 import UserList from '../components/UserList';
 import UserView from '../components/UserView';
+import Alert from '../components/Alert';
 
 type Props = {
   users: {
     results: User[]
-  }
+  },
+  error: string|null
 }
 
 interface HttpResponse<T> extends Response {
@@ -27,14 +29,21 @@ export async function http<T>(
 }
 
 export async function getServerSideProps() {
-  const data = await http<User[]>(
-    "https://randomuser.me/api?results=10"
-  );
+  let data = null;
   
-  return { props: { users: data.results } }
+  const response = await fetch('https://randomuser.me/api?results=10');
+
+  if (response.status == 200) {
+    data = await response.json();
+    return { props: { users: {results: data.results}, error: null } }
+  }
+
+  else {
+    return { props: { users: {results: []}, error: 'Something went wrong while fetching data.' } }
+  }
 }
 
-const Home: NextPage =  (({users} : Props) => {
+const Home: NextPage =  (({users, error = null} : Props) => {
   const { results } = users;
 
   const [selectedUser, setSelectedUser] = useState<User>();
@@ -50,10 +59,14 @@ const Home: NextPage =  (({users} : Props) => {
       <main>
         <div className="mx-auto max-w-7xl mt-12">
           {
-            selectedUser ? (
-              <UserView user={selectedUser} setUser={setSelectedUser} />
+            error ? (
+              <Alert title={error} />
             ) : (
-              <UserList users={results} setUser={setSelectedUser} />
+              selectedUser ? (
+                <UserView user={selectedUser} setUser={setSelectedUser} />
+              ) : (
+                <UserList users={results} setUser={setSelectedUser} />
+              )
             )
           }
         </div>

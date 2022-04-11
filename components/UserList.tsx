@@ -1,8 +1,8 @@
 import { ChevronDownIcon, ChevronUpIcon, EyeIcon } from "@heroicons/react/solid";
-import Image from "next/image";
-import { useEffect, useState } from "react";
 import useSortableDataHook from "../hooks/useSortableDataHook";
+import { useEffect, useState } from "react";
 import User from "../types/User";
+import Image from "next/image";
 
 type Props = {
   users: User[],
@@ -35,6 +35,7 @@ const UserList = (({users, setUser} : Props) => {
               <button
                 type="button"
                 className="cursor-pointer inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                id="male-btn"
                 onClick={() => setFilterByGender(filterByGender == 'male' ? null : "male")}
               >
                 Filter by male
@@ -50,7 +51,7 @@ const UserList = (({users, setUser} : Props) => {
             </div>
           </div>
 
-          <table className="min-w-full divide-y divide-gray-300">
+          <table id="table" className="min-w-full divide-y divide-gray-300">
             <thead className="bg-gray-50">
               <tr>
                 <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6" onClick={() => requestSort('name.first')}>
@@ -58,7 +59,7 @@ const UserList = (({users, setUser} : Props) => {
                 </th>
 
                 <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer">
-                  <span className="group inline-flex" onClick={() => requestSort('gender')}>
+                  <span className="group inline-flex" id="gender-btn" onClick={() => requestSort('gender')}>
                     Gender
 
                    {
@@ -96,43 +97,44 @@ const UserList = (({users, setUser} : Props) => {
                 <th></th>
               </tr>
             </thead>
+
             <tbody className="divide-y divide-gray-200 bg-white">
               {
-                  resultList.map((user: User) => {
-                    return (
-                      <tr className="cursor-pointer" key={user.email} onClick={() => setUser(user)}>
-                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-                          <div className="flex items-center">
-                            <div className="h-10 w-10 flex-shrink-0">
-                              <Image className="rounded-full" src={user.picture.medium} width="50" height="50" alt="" />
+                resultList.map((user: User) => {
+                  return (
+                    <tr className="cursor-pointer" key={user.email} onClick={() => setUser(user)}>
+                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+                        <div className="flex items-center">
+                          <div className="h-10 w-10 flex-shrink-0">
+                            <Image className="rounded-full" src={user.picture.medium} width="50" height="50" alt="" />
+                          </div>
+
+                          <div className="ml-4">
+                            <div className="font-medium text-gray-900">
+                              {user.name.first} {user.name.last}
                             </div>
-
-                            <div className="ml-4">
-                              <div className="font-medium text-gray-900">
-                                {user.name.first} {user.name.last}
-                              </div>
-                            </div>
                           </div>
-                        </td>
+                        </div>
+                      </td>
 
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <div className="text-gray-900">
-                            {user.gender}
-                          </div>
-                        </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <div className="text-gray-900">
+                          {user.gender}
+                        </div>
+                      </td>
 
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <div className="text-gray-900">
-                            {user.phone}
-                          </div>
-                        </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <div className="text-gray-900">
+                          {user.phone}
+                        </div>
+                      </td>
 
-                        <td className="px-3 py-4 text-sm text-gray-500 cursor-pointer">
-                          <EyeIcon className="h-5 w-5" aria-hidden="true" />
-                        </td>
-                      </tr>
-                    )
-                  })
+                      <td className="px-3 py-4 text-sm text-gray-500 cursor-pointer">
+                        <EyeIcon className="h-5 w-5" aria-hidden="true" />
+                      </td>
+                    </tr>
+                  )
+                })
               }
             </tbody>
           </table>
